@@ -46,7 +46,7 @@ $ sudo apt-get install ros-kinetic-rosbridge-server vorbis-tools python-pygame p
 6. Clone the repository in <your_catkin_workspace>/src
 
 ~~~~
-$ git clone https://github.com/interaction-lab/cordial-public.git
+$ git clone https://github.com/ndennler/cordial-public.git
 ~~~~
 
 7. Make everything
