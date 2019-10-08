@@ -45,6 +45,20 @@ $ sudo apt-get install ros-kinetic-rosbridge-server vorbis-tools python-pygame p
 
 6. Clone the repository in <your_catkin_workspace>/src
 
+(if you do not have a catkin workspace run the following commands):
+~~~~
+$ mkdir -p ~/catkin_ws/src
+$ cd ~/catkin_ws/
+$ catkin_make
+# source the setup file, so ros can be aware of the packages in your workspace
+$ source devel/setup.bash 
+# automatically source this file every time you start a new terminal
+$ echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+
+
+~~~~
+
+then clone:
 ~~~~
 $ git clone https://github.com/ndennler/cordial-public.git
 ~~~~
