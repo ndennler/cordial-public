@@ -18,7 +18,9 @@ $ sudo npm install http-server -g
 $ ln -s /usr/bin/nodejs /usr/bin/node
 
 
-$ sudo apt-get install ros-kinetic-rosbridge-server vorbis-tools python-pygame python-requests python-serial ros-kinetic-tf python-gst0.10 python-scipy
+$ sudo apt-get install ros-kinetic-rosbridge-server vorbis-tools python-pygame python-requests python-serial ros-kinetic-tf python-gst0.10 python-scipy python-pip
+
+$ sudo pip install boto3
 ~~~~
 4. Install the pololu maestro MCB software (if using the spritebot)
 
