@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<title>CoRDial Tablet Interface</title>
+        <!--<style>canvas { width: 100%; height: 100% }</style>-->
+        <link rel="stylesheet" href="styles/styles.css">
+	</head>
+	<body>
+        <!-- import D3 -- we will want to make this a local copy -->
+         <script src="https://d3js.org/d3.v5.min.js"></script> 
+         
+         <!-- unsure if we need these two at the moment -->
+		<!-- <script src="js/pixi.min.js"></script>
+        <script src="js/tween.min.js"></script> -->
+
+        <!-- these are required for ros communications and setting up the page -->
+		<script src="js/eventemitter2.min.js"></script>
+		<script src="js/roslib.min.js"></script>
+        <script src="js/interaction.js"></script>
+        <script>
+                ros_init("")
+        </script>
+        
+            <div id="blackbox"></div>
+
+            <div class="container">
+                <div class="input-div">
+                    <h1 id="input-prompt" >"Prompt"</h1>
+    
+                    <div id="input-options">
+                        <input class="btn" value=1 type="button">
+                        <input class="btn" value=2 type="button">
+                        <input class="btn" value=3 type="button">
+                    </div>
+
+                    <input style="margin-top: 50px" class='btn' id="submitBtn" type=submit onclick=sendResponse()>
+                    <h4 id="error-prompt" style='color:red'></h4>
+                </div>
+            </div>
+        
+    </body>
+
+</html>
