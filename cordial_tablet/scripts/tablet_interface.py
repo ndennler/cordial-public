@@ -54,14 +54,14 @@ class TabletInterface():
         tablet_input = TabletInstruction(content, request.buttons, request.args, request.type)
         self.tablet_pub.publish(tablet_input)
 
-        #wait for a request for 60 seconds, 
+        #wait for a request for 2 minutes, if none is given, respond with response timeout 
         try:
-            response = rospy.wait_for_message("/CoRDial/tablet/tabletResponse/", String, timeout=60.0)
+            response = rospy.wait_for_message("/CoRDial/tablet/tabletResponse/", String, timeout=120.0)
             return response.data
 
         except:
             self.tablet_pub.publish(TabletInstruction('', [''], [''], 'off'))
-            return 'response timeout :('
+            return '~REPONSE TIMEOUT~'
         
     def process_string_for_display(self, string):
         stripped_content = re.sub('<[^>]*>', '', string) #remove angle brackets
