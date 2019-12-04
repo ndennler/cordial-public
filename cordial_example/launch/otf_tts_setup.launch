@@ -23,4 +23,6 @@
 
 <node name="cordial_tts" pkg="cordial_tts" type="otf_node.py" output ="screen" args="-p $(arg phrase_file_dir) -y $(arg phrase_file_yaml)"/>
 
+<node name="cordial_tablet_interface" pkg="cordial_tablet" type="tablet_interface.py" output ="screen"/>
+
 </launch>

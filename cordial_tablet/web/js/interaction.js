@@ -28,26 +28,26 @@ function ros_init(ros_master_uri){
 
     token_listener = new ROSLIB.Topic({
         ros : ros,
-	name : '/CoRDial/tablet/inputQuery/',
-	messageType : 'std_msgs/String'
+        name : '/CoRDial/tablet/inputQuery/',
+        messageType : 'cordial_tablet/TabletInstruction'
     });
 
     token_listener.subscribe(processRequest);
 
 
     response_publisher = new ROSLIB.Topic({
-	ros : ros,
-	name : '/CoRDial/tablet/tabletResponse/',
-	queue_size: 3,
-	messageType: 'std_msgs/String'
+        ros : ros,
+        name : '/CoRDial/tablet/tabletResponse/',
+        queue_size: 3,
+        messageType: 'std_msgs/String'
     });
 
 
 }
 
-//variable that stores the response to the input
-var response;
 
+var response; //variable that stores the response to the input
+var timeout;
 /*
 Function to handle the msg requests coming in on /CoRDal/tablet/inputQuery
 inputs: msg - ROS message
@@ -55,17 +55,19 @@ outputs: none
 side effects: calls the relevant page constructor (updates HTML elements)
 */
 function processRequest(msg) {
-    if(msg.data == 'multiple_choice'){
-        createMultipleChoiceInterface('Testing Multiple Choice...', ['Option 1', 'Option 2', 'Option 3'])
+    clearTimeout(timeout)
+
+    if(msg.type == 'multiple_choice'){
+        createMultipleChoiceInterface(msg.content, msg.buttons)
     }
-    if(msg.data == 'slider'){
-        createSliderInterface('Testing Slider...', 0, 100, 50)
+    if(msg.type == 'slider'){
+        createSliderInterface(msg.content, int(msg.args[0]), int(msg.args[1]), int(msg.args[2]), msg.buttons)
     }
-    if(msg.data == 'text'){
-        createStringInputInterface('Testing Input Text...', 'I am but a placeholder :3')
+    if(msg.type== 'text'){
+        createStringInputInterface(msg.content, msg.args[0], msg.buttons)
     }
     
-    if(msg.data == 'off'){
+    if(msg.type == 'off'){
         goBlack()
     }
     else{
@@ -85,9 +87,9 @@ function goBlack(){
     d3.select('#blackbox')
         .style('z-index', '2')
         .transition()
-        .duration(5000)
-        .ease(d3.easeLinear)
-        .style('opacity', '1')
+            .duration(5000)
+            .ease(d3.easeLinear)
+            .style('opacity', '1')
 
 }
 
@@ -98,13 +100,11 @@ outputs - none
 side effects - screen comes online quickly over 0.5 seconds
 */
 function undoGoBlack(){
-
     d3.select('#blackbox')
         .transition()
-        .duration(500)
-        .style('opacity', '0')
-        .style('z-index', '-1')
-
+            .duration(500)
+            .style('opacity', '0')
+            .style('z-index', '-1')
 }
 
 /*
@@ -129,12 +129,14 @@ function createMultipleChoiceInterface(prompt, buttonChoices){
         .selectAll('*')
         .data(buttonChoices)
         .enter()
+            .append('div')
             .append('input')
             .attr('type', 'button')
             .attr('class', 'button')
             .attr('value', function (d){return d;} )
             .on('click', function(d){
                 response = d
+                sendResponse()
             })
 
 }
@@ -145,7 +147,7 @@ inputs: prompt - string - the question a user will respond to
         placeholder - string - the default text of the text input
 side effect: modifies input-options div
 */
-function createStringInputInterface(prompt, placeholder){
+function createStringInputInterface(prompt, placeholder, buttonChoices){
     //change the prompt
     d3.select('#input-prompt')
         .text(prompt)
@@ -165,6 +167,22 @@ function createStringInputInterface(prompt, placeholder){
                 response = d3.select("#text-input").property("value")
             })
 
+    //place the buttons
+    d3.select('#input-options')
+    .selectAll('.button')
+    .data(buttonChoices)
+    .enter()
+        .append('div')
+        .append('input')
+        .attr('type', 'button')
+        .attr('class', 'button')
+        .style('margin-top', '3vh')
+        .attr('value', function (d){return d;} )
+        .on('click', function(d){
+            response = d3.select("#text-input").property("value")
+            sendResponse()
+        })
+
 }
 
 /*
@@ -176,7 +194,7 @@ inputs: prompt - string - the question a user will respond to
 outputs - none
 side effect: modifies input-options div
 */
-function createSliderInterface(prompt, minimum, maximum, initialValue){
+function createSliderInterface(prompt, minimum, maximum, initialValue, buttonChoices){
     //change the prompt
     d3.select('#input-prompt')
         .text(prompt)
@@ -207,6 +225,82 @@ function createSliderInterface(prompt, minimum, maximum, initialValue){
         .append('span')
         .attr('id','value')
         .text(initialValue)
+    
+    //place the buttons
+    d3.select('#input-options')
+    .selectAll('.button')
+    .data(buttonChoices)
+    .enter()
+        .append('div')
+        .append('input')
+        .attr('type', 'button')
+        .attr('class', 'button')
+        .style('margin-top', '3vh')
+        .attr('value', function (d){return d;} )
+        .on('click', function(d){
+            response = d3.select("#slider").property("value")
+            sendResponse()
+        })
+
+}
+
+/*
+Creates a blank screen
+inputs: none
+outputs: none
+side effect: modifies input-options div and input prompt div
+*/
+function endScreen(){
+
+    timeout = setTimeout(goBlack, 2000)
+    
+    //clear input prompt
+    d3.select('#input-prompt')
+        .text('')
+
+    //remove previous input modalities
+    d3.select('#input-options')
+        .selectAll('*')
+        .remove()
+
+    //add action listener to black box
+    d3.select('#blackbox')
+    .on('click', function(){
+        undoGoBlack()
+        //publish that you have been clicked, just in case someone wants to know
+        response_publisher.publish({data:'~CLICKED~'})
+        clearTimeout(timeout)
+        pokedScreen()
+    })
+}
+
+/*
+Creates a screen with a static message if it was poked
+inputs: none
+outputs: none
+side effect: modifies input-options div and input prompt div
+*/
+function pokedScreen(){
+
+    timeout = setTimeout(goBlack, 2000)
+    
+    //
+    d3.select('#input-prompt')
+        .text('Check back later for more information!')
+
+    //remove previous input modalities
+    d3.select('#input-options')
+        .selectAll('*')
+        .remove()
+
+    //add action listener to the blackbox div
+    d3.select('#blackbox')
+    .on('click', function(){
+        undoGoBlack()
+        response_publisher.publish({data: '~CLICKED~'})
+        clearTimeout(timeout)
+        pokedScreen()
+    })
 }
 
 /*
@@ -214,4 +308,6 @@ sends a response to the ROS topic /CoRDial/tablet/tabletResponse
 */
 function sendResponse(){
     response_publisher.publish({data: response})
+    endScreen()
 }
+
