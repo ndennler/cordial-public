@@ -61,7 +61,7 @@ function processRequest(msg) {
         createMultipleChoiceInterface(msg.content, msg.buttons)
     }
     if(msg.type == 'slider'){
-        createSliderInterface(msg.content, int(msg.args[0]), int(msg.args[1]), int(msg.args[2]), msg.buttons)
+        createSliderInterface(msg.content, parseInt(msg.args[0]), parseInt(msg.args[1]), parseInt(msg.args[2]), msg.buttons)
     }
     if(msg.type== 'text'){
         createStringInputInterface(msg.content, msg.args[0], msg.buttons)

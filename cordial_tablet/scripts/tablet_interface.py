@@ -22,6 +22,7 @@
 import roslib; roslib.load_manifest('cordial_core')
 import rospy
 import re
+import sys
 from cordial_tablet.msg import TabletInstruction
 from cordial_tablet.srv import Instructions
 from std_msgs.msg import String
@@ -30,16 +31,16 @@ from cordial_core import RobotManager
 
 
 class TabletInterface():
-    def __init__(self):
+    def __init__(self, timeout_seconds=120.0):
 
         rospy.init_node("CoRDial_Tablet_Interface")
         self.rm = RobotManager("DB1")
+        self.timeout_seconds = float(timeout_seconds)
 
         self.service = rospy.Service('tablet_interface_service', Instructions, self.process_service_request)
 
         self.tablet_pub = rospy.Publisher('/CoRDial/tablet/inputQuery', TabletInstruction)
         self.tts_pub = rospy.Publisher('/tts_topic', String)
-        # self.response_sub = rospy.Subscriber('/CoRDial/tablet/tabletResponse/', String, self.receive_response)
 
    
     def process_service_request(self, request):
@@ -56,10 +57,11 @@ class TabletInterface():
 
         #wait for a request for 2 minutes, if none is given, respond with response timeout 
         try:
-            response = rospy.wait_for_message("/CoRDial/tablet/tabletResponse/", String, timeout=120.0)
+            response = rospy.wait_for_message("/CoRDial/tablet/tabletResponse/", String, timeout=self.timeout_seconds)
             return response.data
 
-        except:
+        except rospy.exceptions.ROSException as e:
+            print(type(e))
             self.tablet_pub.publish(TabletInstruction('', [''], [''], 'off'))
             return '~REPONSE TIMEOUT~'
         
@@ -71,5 +73,6 @@ class TabletInterface():
         
 
 if __name__=="__main__":
-    interface = TabletInterface()
+    timeout = 120 if len(sys.argv) < 1 else sys.argv[1]
+    interface = TabletInterface(timeout)
     rospy.spin()
