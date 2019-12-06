@@ -83,13 +83,21 @@ outputs - none
 side effects - screen fades to black slowly over 5 seconds
 */
 function goBlack(){
+    
 
     d3.select('#blackbox')
         .style('z-index', '2')
+        .on('click', function(){
+            undoGoBlack()
+            response_publisher.publish({data: '~CLICKED~'})
+            clearTimeout(timeout)
+            pokedScreen()
+        })
         .transition()
             .duration(5000)
             .ease(d3.easeLinear)
             .style('opacity', '1')
+        
 
 }
 
@@ -264,14 +272,14 @@ function endScreen(){
         .remove()
 
     //add action listener to black box
-    d3.select('#blackbox')
-    .on('click', function(){
-        undoGoBlack()
-        //publish that you have been clicked, just in case someone wants to know
-        response_publisher.publish({data:'~CLICKED~'})
-        clearTimeout(timeout)
-        pokedScreen()
-    })
+    // d3.select('#blackbox')
+    // .on('click', function(){
+    //     undoGoBlack()
+    //     //publish that you have been clicked, just in case someone wants to know
+    //     response_publisher.publish({data:'~CLICKED~'})
+    //     clearTimeout(timeout)
+    //     pokedScreen()
+    // })
 }
 
 /*
@@ -295,12 +303,12 @@ function pokedScreen(){
 
     //add action listener to the blackbox div
     d3.select('#blackbox')
-    .on('click', function(){
-        undoGoBlack()
-        response_publisher.publish({data: '~CLICKED~'})
-        clearTimeout(timeout)
-        pokedScreen()
-    })
+    // .on('click', function(){
+    //     undoGoBlack()
+    //     response_publisher.publish({data: '~CLICKED~'})
+    //     clearTimeout(timeout)
+    //     pokedScreen()
+    // })
 }
 
 /*
