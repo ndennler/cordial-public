@@ -73,6 +73,6 @@ class TabletInterface():
         
 
 if __name__=="__main__":
-    timeout = 120 if len(sys.argv) < 1 else sys.argv[1]
+    timeout = 120 if len(sys.argv) < 2 else sys.argv[1]
     interface = TabletInterface(timeout)
     rospy.spin()

@@ -23,6 +23,31 @@ def usage():
 if __name__ == "__main__":
     
 
+
+    prompt = 'Hello I am time range'
+    buttons = ['submit time']
+    args = ['1:00 AM', '10:00 PM', '5:00 PM', '7:00 PM']
+    screen_type = 'slider-timerange'
+
+    print(send_instructions(prompt, buttons, args, screen_type))
+    rospy.sleep(10.0)
+
+    prompt = 'Hello I am date slider'
+    buttons = ['submit time']
+    args = ['1:00 PM', '10:00 PM', '5:00 PM']
+    screen_type = 'slider-time'
+
+    print(send_instructions(prompt, buttons, args, screen_type))
+    rospy.sleep(10.0)
+
+    prompt = 'Hello I am slider with a range'
+    buttons = ['submit range']
+    args = ['1', '10', '5', '7']
+    screen_type = 'slider-range'
+
+    print(send_instructions(prompt, buttons, args, screen_type))
+    rospy.sleep(10.0)
+
     prompt = 'Hello I am slider'
     buttons = ['ok']
     args = ['1', '10', '5']
@@ -30,6 +55,7 @@ if __name__ == "__main__":
 
     print(send_instructions(prompt, buttons, args, screen_type))
     rospy.sleep(10.0)
+
 
     prompt = 'Hello I am a text'
     buttons = ['ok']

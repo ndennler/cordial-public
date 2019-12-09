@@ -63,6 +63,16 @@ function processRequest(msg) {
     if(msg.type == 'slider'){
         createSliderInterface(msg.content, parseInt(msg.args[0]), parseInt(msg.args[1]), parseInt(msg.args[2]), msg.buttons)
     }
+    if(msg.type == 'slider-time'){
+        createTimeSliderInterface(msg.content, msg.args[0], msg.args[1], msg.args[2], msg.buttons)
+    }
+    if(msg.type == 'slider-timerange'){
+        createTimeRangeSliderInterface(msg.content, msg.args[0], msg.args[1], msg.args[2], msg.args[3], msg.buttons)
+    }
+    if(msg.type == 'slider-range'){
+        createRangeSliderInterface(msg.content, parseInt(msg.args[0]), parseInt(msg.args[1]), parseInt(msg.args[2]), parseInt(msg.args[3]), msg.buttons)
+    }
+
     if(msg.type== 'text'){
         createStringInputInterface(msg.content, msg.args[0], msg.buttons)
     }
@@ -212,27 +222,45 @@ function createSliderInterface(prompt, minimum, maximum, initialValue, buttonCho
         .selectAll('*')
         .remove()
 
-    //place the slider
+    //place the slider div
     d3.select('#input-options')
         .append('div')
-        .append('input')
         .attr('id', 'slider')
-        .attr('type', 'range')
-        .attr('min', minimum)
-        .attr('max', maximum)
-        .attr('value', initialValue)
-        .on('input', function(){
-            d3.select('#value')
-            .text(d3.select("#slider").property("value"))
-            response = d3.select("#slider").property("value")
-        })
+
+    var slider = d3
+        .sliderBottom()
+        .min(minimum)
+        .max(maximum)
+        .default(initialValue)
+        .width(440) //change to values based on view width
+        .tickFormat(d3.format('.0f'))
+        .ticks(5)
+        .on('onchange', val => {
+            d3.select('p#value').text(d3.format('.1f')(val));
+        });
+
+        var gSimple = d3
+        .select('div#slider')
+        .append('svg')
+        .attr('width', 500)
+        .attr('height', 100)
+        .append('g')
+        .attr('transform', 'translate(30,30)');
+    
+        gSimple.call(slider);
+        
+        d3.select('#input-options')
+            .append('p')
+            .attr('id', 'value')
+
+        d3.select('p#value').text(d3.format('.1f')(slider.value()));
 
     //place the text showing the value
-    d3.select('#input-options')
-        .append('div')
-        .append('span')
-        .attr('id','value')
-        .text(initialValue)
+    // d3.select('#input-options')
+    //     .append('div')
+    //     .append('span')
+    //     .attr('id','value')
+    //     .text(initialValue)
     
     //place the buttons
     d3.select('#input-options')
@@ -245,12 +273,255 @@ function createSliderInterface(prompt, minimum, maximum, initialValue, buttonCho
         .attr('class', 'button')
         .style('margin-top', '3vh')
         .attr('value', function (d){return d;} )
-        .on('click', function(d){
-            response = d3.select("#slider").property("value")
+        .on('click', function(){
+            response = d3.format('.1f')(slider.value())
             sendResponse()
         })
 
 }
+
+
+/*
+Creates a sliding bar interface
+inputs: prompt - string - the question a user will respond to
+        minimum - int - minimum value that one can respond with
+        maximum - int - maximum value one can respond with
+        initialValue - int - where the slider starts 
+outputs - none
+side effect: modifies input-options div
+*/
+function createRangeSliderInterface(prompt, minimum, maximum, initialValueLow, initialValueHigh, buttonChoices){
+    //change the prompt
+    d3.select('#input-prompt')
+        .text(prompt)
+
+    //remove previous input modalities
+    d3.select('#input-options')
+        .selectAll('*')
+        .remove()
+
+    //place the slider div
+    d3.select('#input-options')
+        .append('div')
+        .attr('id', 'slider')
+
+    // Range
+    var slider = d3
+        .sliderBottom()
+        .min(minimum)
+        .max(maximum)
+        .width(440) //also change this later
+        .tickFormat(d3.format('.0f'))
+        .ticks(5)
+        .default([initialValueLow, initialValueHigh])
+        .fill('#2196f3')
+        .on('onchange', val => {
+        d3.select('p#value').text(val.map(d3.format('.1f')).join('-'));
+        });
+
+    var gRange = d3
+        .select('div#slider')
+        .append('svg')
+        .attr('width', 500)
+        .attr('height', 100)
+        .append('g')
+        .attr('transform', 'translate(30,30)');
+
+    gRange.call(slider);
+
+    d3.select('#input-options')
+        .append('p')
+        .attr('id', 'value')
+
+    d3.select('p#value').text(
+        slider
+        .value()
+        .map(d3.format('.1f'))
+        .join('-')
+    );
+        
+    
+
+    //place the buttons
+    d3.select('#input-options')
+    .selectAll('.button')
+    .data(buttonChoices)
+    .enter()
+        .append('div')
+        .append('input')
+        .attr('type', 'button')
+        .attr('class', 'button')
+        .style('margin-top', '3vh')
+        .attr('value', function (d){return d;} )
+        .on('click', function(){
+            response = slider.value().map(d3.format('.1f')).join('-')
+            sendResponse()
+        })
+
+}
+
+
+
+/*
+Creates a sliding bar interface
+inputs: prompt - string - the question a user will respond to
+        minimum - int - minimum value that one can respond with
+        maximum - int - maximum value one can respond with
+        initialValue - int - where the slider starts 
+outputs - none
+side effect: modifies input-options div
+*/
+function createTimeSliderInterface(prompt, minimum, maximum, initialValue, buttonChoices){
+    //change the prompt
+    d3.select('#input-prompt')
+        .text(prompt)
+
+    //remove previous input modalities
+    d3.select('#input-options')
+        .selectAll('*')
+        .remove()
+
+    //place the slider div
+    d3.select('#input-options')
+        .append('div')
+        .attr('id', 'slider')
+
+
+    var slider = d3
+        .sliderBottom()
+        .min(Date.parse('04 Dec 1995 ' + minimum))
+        .max(Date.parse('04 Dec 1995 ' + maximum))
+        .default(Date.parse('04 Dec 1995 ' + initialValue))
+        .width(440) //change to values based on view width
+        .tickFormat(d3.timeFormat('%H:%M %p'))
+        .ticks(5)
+        .step(1000*60*15)
+        .on('onchange', val => {
+            d3.select('p#value').text(d3.timeFormat('%H:%M %p')(val));
+        });
+
+        var gSimple = d3
+        .select('div#slider')
+        .append('svg')
+        .attr('width', 500)
+        .attr('height', 100)
+        .append('g')
+        .attr('transform', 'translate(30,30)');
+    
+        gSimple.call(slider);
+        
+        d3.select('#input-options')
+            .append('p')
+            .attr('id', 'value')
+
+        d3.select('p#value').text(d3.timeFormat('%H:%M %p')(slider.value()));
+
+    //place the text showing the value
+    // d3.select('#input-options')
+    //     .append('div')
+    //     .append('span')
+    //     .attr('id','value')
+    //     .text(initialValue)
+    
+    //place the buttons
+    d3.select('#input-options')
+    .selectAll('.button')
+    .data(buttonChoices)
+    .enter()
+        .append('div')
+        .append('input')
+        .attr('type', 'button')
+        .attr('class', 'button')
+        .style('margin-top', '3vh')
+        .attr('value', function (d){return d;} )
+        .on('click', function(){
+            response = d3.timeFormat('%H:%M %p')(slider.value())
+            sendResponse()
+        })
+
+}
+
+
+/*
+Creates a sliding bar interface
+inputs: prompt - string - the question a user will respond to
+        minimum - int - minimum value that one can respond with
+        maximum - int - maximum value one can respond with
+        initialValue - int - where the slider starts 
+outputs - none
+side effect: modifies input-options div
+*/
+function createTimeRangeSliderInterface(prompt, minimum, maximum, initialValueLow, initialValueHigh, buttonChoices){
+    //change the prompt
+    d3.select('#input-prompt')
+        .text(prompt)
+
+    //remove previous input modalities
+    d3.select('#input-options')
+        .selectAll('*')
+        .remove()
+
+    //place the slider div
+    d3.select('#input-options')
+        .append('div')
+        .attr('id', 'slider')
+
+    // Range
+    var slider = d3
+        .sliderBottom()
+        .min(Date.parse('04 Dec 1995 ' + minimum))
+        .max(Date.parse('04 Dec 1995 ' + maximum))
+        .default([Date.parse('04 Dec 1995 ' + initialValueLow),Date.parse('04 Dec 1995 ' + initialValueHigh)])
+        .width(440) //also change this later
+        .tickFormat(d3.timeFormat('%H:%M %p'))
+        .ticks(5)
+        .step(1000*60*15)
+        .fill('#2196f3')
+        .on('onchange', val => {
+        d3.select('p#value').text(val.map(d3.timeFormat('%H:%M %p')).join('-'));
+        });
+
+    var gRange = d3
+        .select('div#slider')
+        .append('svg')
+        .attr('width', 500)
+        .attr('height', 100)
+        .append('g')
+        .attr('transform', 'translate(30,30)');
+
+    gRange.call(slider);
+
+    d3.select('#input-options')
+        .append('p')
+        .attr('id', 'value')
+
+    d3.select('p#value').text(
+        slider
+        .value()
+        .map(d3.timeFormat('%H:%M %p'))
+        .join('-')
+    );
+        
+    
+
+    //place the buttons
+    d3.select('#input-options')
+    .selectAll('.button')
+    .data(buttonChoices)
+    .enter()
+        .append('div')
+        .append('input')
+        .attr('type', 'button')
+        .attr('class', 'button')
+        .style('margin-top', '3vh')
+        .attr('value', function (d){return d;} )
+        .on('click', function(){
+            response = slider.value().map(d3.timeFormat('%H:%M %p')).join('-')
+            sendResponse()
+        })
+
+}
+
 
 /*
 Creates a blank screen
