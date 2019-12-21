@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<title>Button Prompt</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<div class="container">
+		<div class="inputDiv">
+			<!-- used this for scrolling shit: https://stackoverflow.com/questions/35896084/make-one-column-of-a-bootstrap-row-scrollable -->
+			<div class="row">
+				<div class="col left">
+					<h1 id="btnPrompt" >"Prompt"</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Cum sociis natoque penatibus et magnis. Tincidunt eget nullam non nisi est. Pulvinar sapien et ligula ullamcorper malesuada proin libero nunc. Nulla facilisi morbi tempus iaculis urna id. Fusce id velit ut tortor pretium viverra suspendisse potenti nullam. Sed faucibus turpis in eu mi bibendum neque. Enim sed faucibus turpis in eu mi bibendum. Amet nulla facilisi morbi tempus iaculis urna. Consequat interdum varius sit amet mattis vulputate enim. Ut etiam sit amet nisl purus in. Lorem ipsum dolor sit amet consectetur adipiscing elit duis. Posuere ac ut consequat semper viverra nam libero justo. Congue nisi vitae suscipit tellus. Id diam maecenas ultricies mi eget mauris pharetra. Nulla posuere sollicitudin aliquam ultrices.
+
+Etiam erat velit scelerisque in dictum non consectetur a erat. Massa tincidunt dui ut ornare lectus sit. In aliquam sem fringilla ut morbi tincidunt. Feugiat sed lectus vestibulum mattis ullamcorper velit sed. Pellentesque nec nam aliquam sem et tortor consequat id. Et netus et malesuada fames ac turpis egestas sed tempus. Et magnis dis parturient montes nascetur ridiculus. Maecenas volutpat blandit aliquam etiam erat velit scelerisque. Metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices. Ac auctor augue mauris augue neque gravida in. A lacus vestibulum sed arcu non odio. Vulputate eu scelerisque felis imperdiet proin fermentum. Ac tincidunt vitae semper quis lectus nulla. Adipiscing tristique risus nec feugiat in fermentum posuere. Id ornare arcu odio ut sem nulla pharetra diam. Elementum tempus egestas sed sed risus pretium. Turpis in eu mi bibendum neque egestas congue quisque. Dictum non consectetur a erat nam at lectus urna. Quis blandit turpis cursus in. Mauris vitae ultricies leo integer malesuada.
+
+Rhoncus urna neque viverra justo nec ultrices. Ultrices in iaculis nunc sed augue. Eget felis eget nunc lobortis mattis. Amet facilisis magna etiam tempor orci eu lobortis elementum nibh. Sit amet massa vitae tortor condimentum lacinia quis. Massa tempor nec feugiat nisl pretium fusce id velit. Sed faucibus turpis in eu mi bibendum neque. Pellentesque habitant morbi tristique senectus et netus et malesuada. Sit amet nisl suscipit adipiscing bibendum est ultricies integer quis. Sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium. Non curabitur gravida arcu ac tortor dignissim convallis aenean et. Adipiscing diam donec adipiscing tristique risus nec feugiat in fermentum. Viverra nibh cras pulvinar mattis nunc sed blandit libero. Ultricies tristique nulla aliquet enim tortor. Suspendisse in est ante in.
+
+Justo nec ultrices dui sapien eget mi proin sed. Id nibh tortor id aliquet lectus proin nibh nisl. Quis vel eros donec ac odio tempor orci dapibus ultrices. Dapibus ultrices in iaculis nunc. Morbi quis commodo odio aenean sed adipiscing diam. Purus in mollis nunc sed id semper. Ut faucibus pulvinar elementum integer enim neque volutpat ac. Ipsum dolor sit amet consectetur adipiscing elit ut aliquam. Pellentesque dignissim enim sit amet venenatis urna cursus eget nunc. Nisl condimentum id venenatis a condimentum vitae sapien pellentesque. Semper risus in hendrerit gravida. Consequat semper viverra nam libero justo laoreet sit amet. Quisque non tellus orci ac. Blandit cursus risus at ultrices.
+
+Mauris pellentesque pulvinar pellentesque habitant morbi. Ut diam quam nulla porttitor. Dignissim sodales ut eu sem integer vitae justo. Nec feugiat nisl pretium fusce id velit. Felis bibendum ut tristique et egestas. Id diam vel quam elementum pulvinar. Rutrum quisque non tellus orci ac auctor augue mauris. Orci eu lobortis elementum nibh tellus molestie nunc non. Fames ac turpis egestas sed tempus urna et. Urna duis convallis convallis tellus id interdum velit laoreet. Vitae sapien pellentesque habitant morbi.</p>
+				</div>
+				<div class="col right" id="btns">
+					<input class="btn" value=1 type="button">
+					<input class="btn" value=2 type="button">
+					<input class="btn" value=3 type="button">
+					<br> <br>
+					<input style="margin-top: 10px" id="submitBtn" type=submit>
+				</div>
+
+			</div>
+
+
+		</div>
+	</div>
+</body>
+<script>
+	function btn_input(prompt, array) {
+		document.querySelector("#btnPrompt").innerHTML = prompt;
+		var btns = document.querySelectorAll(".btn");
+		for(let i = 0; i<array.length; i++){
+			btns[i].value = array[i];
+		}
+	}
+</script>
+</html>
