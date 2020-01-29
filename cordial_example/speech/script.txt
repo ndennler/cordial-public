@@ -1,4 +1,4 @@
-[statement1]Hi! Welcome to cordial, the most *leftBrowRaise*cordial robot controller!
+[statement1]Hi!*breath:1,3,0.9* Welcome to cordial, the most *leftBrowRaise*cordial robot controller!
 [statement2]I'll do behaviors tagged *doubleBrowRaise*in the script!
 [statement3]These first few sentences were pre-generated.
 [statement4]I recommend you keep my statements short and sweet.
@@ -10,5 +10,5 @@
 [statement10]I can take dramatic *saucy*<break time="1200ms"/> pauses.
 [statement11]I know the difference between <phoneme alphabet="x-sampa" ph="pIˈkAːn">pecan</phoneme> and <break time="200ms"/> <phoneme alphabet="x-sampa" ph="pi'k{n">pecan</phoneme> <break time="100ms"/>or <break time="200ms"/><phoneme alphabet="x-sampa" ph="veIs">vase</phoneme> <break time="100ms"/>and <break time="300ms"/><phoneme alphabet="x-sampa" ph="vAz">vase</phoneme>.
 [statement12]I can say fractions like <say-as interpret-as="fraction">3+1/2</say-as> or telephone numbers like <say-as interpret-as="telephone">2137406245</say-as>
-[statement13]But don't worry, I can still stop <break time="100ms"/>*breath*<amazon:breath duration="long" volume="x-loud"/><break time="700ms"/>and take breath when I need to.
+[statement13]But don't worry, I can still stop <break time="100ms"/>*breath:0.5,1.3,0.9*<amazon:breath duration="long" volume="x-loud"/><break time="700ms"/>and take breath when I need to.
 [statement14]I hope you enjoy working with me!
