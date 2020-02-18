@@ -30,8 +30,8 @@ from botocore.exceptions import BotoCoreError, ClientError
 from contextlib import closing
 
 class CoRDialTTS():
-    def __init__(self, voice):
-        self.voice = voice;
+    def __init__(self, voice="Justin"):
+        self.voice = voice
         self.tts = client("polly", region_name='us-west-1')# you can change the region in this line
 
     #function used to generate viseme and expression time data.

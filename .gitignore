@@ -101,6 +101,7 @@ ENV/
 **/*~
 **/#*#
 **/build/**
-**/__*__.py
 **/*.yaml
 .vscode
+**/.DS_Store
+!**/tests/expected/*
