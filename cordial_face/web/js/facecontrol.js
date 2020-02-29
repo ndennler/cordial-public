@@ -161,6 +161,12 @@ var params = {
   //create a new gui object and adjust width so all descriptions can be read
   var gui = new dat.GUI({hideable: true});
   gui.width = 400;
+  
+  //brings the control panel to the front
+  //.dg and .ac are classes from the dat.gui.js library
+  document.querySelectorAll(".dg, .ac").forEach(function(item) {
+    item.style.zIndex = "1"
+  });
 
   //3 Action Units for Eyebrows
   var brows = gui.addFolder( 'Eyebrow Action Units' );
