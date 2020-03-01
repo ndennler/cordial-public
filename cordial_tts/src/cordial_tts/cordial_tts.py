@@ -30,8 +30,8 @@ from botocore.exceptions import BotoCoreError, ClientError
 from contextlib import closing
 
 class CoRDialTTS():
-    def __init__(self, voice):
-        self.voice = voice;
+    def __init__(self, voice="Justin"):
+        self.voice = voice
         self.tts = client("polly", region_name='us-west-1')# you can change the region in this line
 
     #function used to generate viseme and expression time data.
@@ -76,13 +76,13 @@ class CoRDialTTS():
         i = 0
         for w in words:
             if re.match("\*.*\*", w):
-                args = w.strip("*").split()
+                # args are seperated by commas, following the colon after the behavior name
+                args = w.strip("*").split(":")
                 name = args.pop(0)
                 actions.append([i,name,args])
             else:
                 i += 1
         print("PROCESSING: '{}'".format(phrase)) #print out the phase to be converted to speech
-
         #example server code for reference: https://docs.aws.amazon.com/polly/latest/dg/example-Python-server-code.html
         #use the interface to communicate with the Amazon Polly Client
         try:
@@ -119,7 +119,7 @@ class CoRDialTTS():
             args = a[2]
             data.append({"start":float(a[0])+.01, #prevent visemes and actions from being at exactly the same time
                          "type":"action",
-                         "args":args,
+                         "args":list(args[0].split(",")) if len(args) > 0 else args,
 			             "id": a[1]}) # End edits
 
         #get the times of just the visemes, and convert the viseme keys to the set used by CoRDial.

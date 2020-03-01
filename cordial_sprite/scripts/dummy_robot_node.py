@@ -44,9 +44,25 @@ class DummyRobotServer:
         rospy.loginfo("Ptbot Cordial server started.")
 
         #read in behaviors and keyframes from json file to dictonary
-        rospy.loginfo("Loading keyframes from file...")
+        rospy.loginfo("Loading keyframes from file... %s", behavior_file)
         with open(behavior_file,'r') as data_file:
             data = json.load(data_file)
+            # Basic checks for keyframes file
+            for key in data:
+                if "dofs" not in data[key]:
+                    rospy.logerr("Missing entry 'dofs' in behavior '%s'", key)
+                if "keyframes" not in data[key]:
+                    rospy.logerr("Missing entry 'keyframes' in behavior '%s'", key)
+                for keyframe in data[key]["keyframes"]:
+                    if "pose" not in keyframe:
+                        rospy.logerr("Missing entry 'pose' in 'keyframes' of behavior '%s'", key)
+                    if "time" not in keyframe:
+                        rospy.logerr("Missing entry 'time' in 'keyframes' of behavior '%s'", key)
+                    if "ending_action" not in keyframe:
+                        rospy.logerr("Missing entry 'ending_action' in 'keyframes' of behavior '%s'", key)
+                    if not len(keyframe["pose"]) == len(data[key]["dofs"]):
+                        rospy.logerr("Unmatched length of 'dofs' and 'pose' in behavior '%s'", key)
+
         self.KF_behavior_dict = data
         rospy.loginfo("Done loading keyframes.")
 
@@ -72,14 +88,45 @@ class DummyRobotServer:
             success = False
 
         behavior = goal.behavior
+        args = list(map(float, goal.args))
+
         if not behavior in self.KF_behavior_dict.keys():
             rospy.logwarn("Invalid behavior: " + behavior + ", ignoring.")
             success = False
         else:
             frames = self.KF_behavior_dict[behavior]["keyframes"]
             keyframes = map(lambda f: f["pose"], frames)
-            times = map(lambda f: float(f["time"]), frames)
+            times = map(lambda f: f["time"], frames)
             dofs = map(lambda s: str(s), self.KF_behavior_dict[behavior]["dofs"])
+
+            if not len(args) == len(self.KF_behavior_dict[behavior].get("parameters", [])):
+                # or set default values?
+                rospy.logerr("Unmatched length of recieved args and paramaters in the keyframes file")
+            elif len(args) > 0:
+                # Build local dictionary for eval
+                param_dict = {}
+                for i in range(len(args)):
+                    param = self.KF_behavior_dict[behavior]["parameters"][i]
+                    param_dict[param] = args[i]
+                    rospy.loginfo("Paramater " + param + ": " + str(args[i]))
+
+                def eval_params(target, local_dict):
+                    for i in range(len(target)):
+                        # Only str will be evaluated
+                        if isinstance(target[i], basestring):
+                            print(target[i])
+                            target[i] = eval(target[i], {'__builtins__': None}, local_dict)
+                    return target
+
+                keyframes = [eval_params(pose, param_dict) for pose in keyframes]
+                times = eval_params(times, param_dict)
+
+                for i in range(len(keyframes)):
+                    for j in range(len(keyframes[i])):
+                        if keyframes[i][j] < 0 or keyframes[i][j] > 1:
+                            rospy.logwarn("pose %.2f at keyframe %d is out of bounds (0-1). Rounding it to %d", 
+                                            keyframes[i][j], i, min(1, max(0, keyframes[i][j])))
+                            keyframes[i][j] = min(1, max(0, keyframes[i][j]))
 
         # Play the face keyframes
         self.play_face_keyframes(keyframes, times, dofs)
