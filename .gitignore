@@ -104,5 +104,4 @@ ENV/
 **/*.yaml
 .vscode
 **/.DS_Store
-!**/tests/expected/*
 **/openface/*
