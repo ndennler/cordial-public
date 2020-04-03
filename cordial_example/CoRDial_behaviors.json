@@ -1698,5 +1698,153 @@
            "ending_action": false
        }
    ]
-}
-}
+},
+
+"happiness":
+  {
+    "dofs": ["au6", "au12"],
+    "keyframes": [
+       {
+           "pose": [0, 0],
+           "time": 0,
+           "ending_action": false
+       },
+       {
+           "pose": [0.5, 0.8],
+           "time": 2.0,
+           "ending_action": false
+       },
+       {
+           "pose": [0.5, 0.5],
+           "time": 3.0,
+           "ending_action": false
+       }
+   ]
+},
+"sadness":
+  {
+    "dofs": ["au1", "au4", "au15"],
+    "keyframes": [
+       {
+           "pose": [0, 0, 0],
+           "time": 0,
+           "ending_action": false
+       },
+       {
+           "pose": [0.2, 0.5, 0.8],
+           "time": 0.4,
+           "ending_action": false
+       },
+       {
+           "pose": [0.4, 0.8,1],
+           "time": 0.6,
+           "ending_action": false
+       }
+   ]
+},
+"surprise":
+  {
+    "dofs": ["au1", "au2", "au5","au26"],
+    "keyframes": [
+       {
+           "pose": [0, 0, 0, 0],
+           "time": 0,
+           "ending_action": false
+       },
+       {
+           "pose": [0.2, 0.4, 0.6, 0.8],
+           "time": 0.4,
+           "ending_action": false
+       },
+       {
+           "pose": [0.4, 0.6, 0.8, 0.6],
+           "time": 0.6,
+           "ending_action": false
+       }
+   ]
+},
+"fear":
+  {
+    "dofs": ["au1", "au2", "au4","au20"],
+    "keyframes": [
+       {
+           "pose": [0,0,1,0],
+           "time": 0,
+           "ending_action": false
+       },
+       {
+           "pose": [0.2, 0.3, 0.7, 0.4],
+           "time": 0.4,
+           "ending_action": false
+       },
+       {
+           "pose": [1, 0.7, 0.2, 0.8],
+           "time": 0.6,
+           "ending_action": false
+       }
+   ]
+},
+"anger":
+  {
+    "dofs": ["au4", "au5"],
+    "keyframes": [
+       {
+           "pose": [1, 0],
+           "time": 0,
+           "ending_action": false
+       },
+       {
+           "pose": [0.6, 0.5],
+           "time": 0.4,
+           "ending_action": false
+       },
+       {
+           "pose": [0.2,1],
+           "time": 0.6,
+           "ending_action": false
+       }
+   ]
+},
+"disgust":
+  {
+    "dofs": ["au9", "au10"],
+    "keyframes": [
+       {
+           "pose": [0, 0],
+           "time": 0,
+           "ending_action": false
+       },
+       {
+           "pose": [0.2, 0.4],
+           "time": 0.4,
+           "ending_action": false
+       },
+       {
+           "pose": [0.6, 0.8],
+           "time": 0.6,
+           "ending_action": false
+       }
+   ]
+},
+"contempt":
+  {
+    "dofs": ["au12", "au14"],
+    "keyframes": [
+       {
+           "pose": [0, 0],
+           "time": 0,
+           "ending_action": false
+       },
+       {
+           "pose": [0.2, 0.6],
+           "time": 0.4,
+           "ending_action": false
+       },
+       {
+           "pose": [0.8, 1],
+           "time": 0.6,
+           "ending_action": false
+       }
+   ]
+}}
+

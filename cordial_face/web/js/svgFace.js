@@ -538,18 +538,18 @@ function move_face(t, notViseme){
     lcorner = {x:ulip.idleControlPoint.x3, y:ulip.idleControlPoint.y3}
     rcorner = {x:ulip.idleControlPoint.x0, y:ulip.idleControlPoint.y0}
 
-    lcorner.x += max_x_variation*(.2*aus_l[12] + .05*aus_l[13] + .25*aus_l[14] -.1*aus_l[26] -.3*aus_l[27] +.35*aus_l[17]-.7*aus_l[18] + .25*aus_l[20] -.2*aus_l[23] -.1*aus_l[24])/1.1
+    lcorner.x -= max_x_variation*(.2*aus_l[12] + .05*aus_l[13] + .25*aus_l[14] -.1*aus_l[26] -.3*aus_l[27] +.35*aus_l[17]-.7*aus_l[18] + .25*aus_l[20] -.2*aus_l[23] -.1*aus_l[24])/1.1
     lcorner.y += max_down_dist*(-.2*aus_l[25] -.2*aus_l[26] + .7*aus_l[13]-1.5*aus_l[15]-.5*aus_l[27] - .2*aus_l[20] -.3*aus_l[23] -.5*aus_l[24])/3.4
-    rcorner.x -= max_x_variation*(.2*aus_r[12] + .05*aus_r[13] + .25*aus_r[14]-.1*aus_r[26] -.3*aus_r[27] +.35*aus_r[17]-.7*aus_r[18] + .25*aus_r[20] -.2*aus_r[23] -.1*aus_r[24])/1.1
+    rcorner.x += max_x_variation*(.2*aus_r[12] + .05*aus_r[13] + .25*aus_r[14]-.1*aus_r[26] -.3*aus_r[27] +.35*aus_r[17]-.7*aus_r[18] + .25*aus_r[20] -.2*aus_r[23] -.1*aus_r[24])/1.1
     rcorner.y += max_down_dist*(-.2*aus_r[25] -.2*aus_r[26] + .7*aus_r[13]-1.5*aus_r[15]-.5*aus_r[27] - .2*aus_r[20] -.3*aus_r[23] -.5*aus_r[24])/3.4
 
 
     upperl = {x:ulip.idleControlPoint.x2, y:ulip.idleControlPoint.y2}
     upperr = {x:ulip.idleControlPoint.x1, y:ulip.idleControlPoint.y1}
 
-    upperl.x += max_x_variation*(.55*aus_l[10] + .25*aus_l[14]-.4*aus_l[18]+ .25*aus_l[20] -.1*aus_l[23])/1.05
+    upperl.x -= max_x_variation*(.55*aus_l[10] + .25*aus_l[14]-.4*aus_l[18]+ .25*aus_l[20] -.1*aus_l[23])/1.05
     upperl.y += max_up_dist*(.1*aus_l[25] +.3*aus_l[26] +.6*aus_l[27] + .55*aus_l[10]+.35*aus_l[17])/2.2
-    upperr.x -= max_x_variation*(.55*aus_r[10] + .25*aus_r[14]-.4*aus_r[18] + .25*aus_r[20] -.1*aus_r[23])/1.05
+    upperr.x += max_x_variation*(.55*aus_r[10] + .25*aus_r[14]-.4*aus_r[18] + .25*aus_r[20] -.1*aus_r[23])/1.05
     upperr.y += max_up_dist*(.1*aus_r[25] +.3*aus_r[26] +.6*aus_r[27] + .55*aus_r[10]+.35*aus_r[17])/2.2
 
 
@@ -557,9 +557,9 @@ function move_face(t, notViseme){
     lowerl = {x:llip.idleControlPoint.x2, y:llip.idleControlPoint.y2}
     lowerr = {x:llip.idleControlPoint.x1, y:llip.idleControlPoint.y1}
 
-    lowerl.x += max_x_variation*(.25*aus_l[14] + .5*aus_l[16] + .2*aus_l[26]-.4*aus_l[18]+ .25*aus_l[20] -.2*aus_l[23])/1.05
+    lowerl.x -= max_x_variation*(.25*aus_l[14] + .5*aus_l[16] + .2*aus_l[26]-.4*aus_l[18]+ .25*aus_l[20] -.2*aus_l[23])/1.05
     lowerl.y += max_down_dist*(-.4*aus_l[25] -.7*aus_l[26] -1.6*aus_l[27]+ .55*aus_l[10] -.2*aus_l[16] +.45*aus_l[17])/2.2
-    lowerr.x -= max_x_variation*(.25*aus_r[14] + .5*aus_r[16] + .2*aus_r[26]-.4*aus_r[18] + .25*aus_r[20] -.2*aus_r[23])/1.05
+    lowerr.x += max_x_variation*(.25*aus_r[14] + .5*aus_r[16] + .2*aus_r[26]-.4*aus_r[18] + .25*aus_r[20] -.2*aus_r[23])/1.05
     lowerr.y += max_down_dist*(-.4*aus_r[25] -.7*aus_r[26] -1.6*aus_r[27] + .55*aus_r[10] -.2*aus_r[16] +.45*aus_r[17])/2.2
 
     upperLip = {x0:rcorner.x,y0:rcorner.y, x1:upperr.x,y1:upperr.y, x2:upperl.x,y2: upperl.y , x3:lcorner.x,y3:lcorner.y}

@@ -1,0 +1,82 @@
+Naming:
+1. first part: begin with general types
+    a. happiness
+    b. sadness
+    c. surprise
+    d. fear
+    e. disgust
+    f. anger
+    g. other
+2. General types related emotions
+    a. related to happiness
+        1. amusement (a bit surprise)
+        2. content (satisfy)
+        3. desire (with hope)
+        4. interest
+        5. relief
+        6. triumph (achievement, pride)
+        7. love
+        8. gratitude
+        9. laugh
+        10.admiration
+    b. related to sadness
+        1. embarrassment
+        2. pain
+        3. sympathy (for others)
+        4. cry
+        5. unhappy
+    c. related to surprise
+        1. amazed
+        2. coyness
+        3. stagnate (jaw drop)
+    d. related to fear
+        1. shame and guilty
+        2. terror
+        3. anxiety
+    e. related to disgust
+        1. vomit
+        2. contempt (belittle)
+        3. dislike
+    f. related to anger
+        1. rage (cannot control itself)
+        2. sneer (little expression, want to revenge inside)
+        3. indignant (angry for somebody else: eyes look somewhere else)
+    g. related to other
+        1. bored
+        2. confusion
+        3. affirmation
+        4. obstinate
+3. Extent (apply to some)
+    a. small
+    b. medium
+    c. large
+
+Naming: genre_type_extent
+For example: happiness_amusement_large, sadness_cry_small, other_bored (it doesn't have extent)
+
+
+
+
+Emotion                                 Action units                        Description
+amusement                               6+7+12+25+26+53                     Head back, Duchenne smile, lips separated, jaw dropped
+anger                                   4+5+17+23+24                        Brows furrowed, eyes wide, lips tightened and pressed together
+boredom                                 43+55                               eyelids drooping, head tilted
+confusion                               4+7+56                              Brows furrowed, eyelids narrowed, head tilted
+contentment                             12+43                               Smile, eyelids drooping
+coyness                                 6+7+12+25+26+52+54+61               Duchenne smile, lips separated, head turned and down, eyes turned opposite to head turned
+desire                                  19+25+26+43                         Tongue show, lips parted, jaw dropped, eyelids drooping
+disgust(dislike)                        7+9+19+25+26                        Eyes narrowed, nose wrinkled, lips parted, jaw dropped, tongue show
+embarrassment                           7+12+15+52+54+64                    Eyelids narrowed, controlled smile, head turned and down
+fear                                    1+2+4+5+7+20+25                     eyebrows raised and pulled together, upper eyelid raised, lower eyelid tense, lips parted and stretched
+happiness                               6+7+12+25+26                        duchenne display
+interest                                1+2+12                              eyebrows raised, slight smile
+pain                                    4+6+7+9+17+18+23+24                 eyes tightly closed, nose wrinkled, brows furrowed, lips tight, pressed together, and slightly puckered
+pride                                   53+64                               head up, eyes down
+cry                                     1+4+6+15+17                         brows knitted, eyes slightly tightened, lip corners depressed, lower lip raised
+shame                                   54+64                               head down, eyes down
+stagnate                                1+2+5+25+26                         eyebrows raised, upper eyelid raised, lips parted, jaw dropped
+sympathy                                1+17+24+57                          inner eyebrow raised, lower lip raised, lips pressed together, head slightly forward
+
+
+
+reference: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6687086/

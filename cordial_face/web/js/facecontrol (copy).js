@@ -90,7 +90,8 @@ var leftVal = {
             AU43: 0,
             left: true,
             right: false,
-            both: false
+            both: false,
+            time: 0
           };
 var rightVal = {
             AU1: 0,
@@ -123,7 +124,8 @@ var rightVal = {
             AU43: 0,
             left: false,
             right: true,
-            both: false
+            both: false,
+            time: 0
           };
 var params = {
             AU1: 0,
@@ -156,12 +158,81 @@ var params = {
             AU43: 0,
             left: false,
             right: false,
-            both: true
+            both: true,
+            time: 0
           };
-
+  
+  //d3 experiment
+  // Simple
+  var slider = d3.sliderHorizontal()
+                 .min(0)
+                 .max(10)
+                 .step(1)
+                 .width(1300)
+                 .displayValue(false);
+                 //.on('onchange', val=>{
+                 //   d3.select('#value').text(val);
+                 //})
+                
+  var svg = d3.select('#slider')
+    .append('svg')
+    .attr('width',1300)
+    .attr('height',50);
+  svg.attr('transform','translate(10,800)');
+  svg.append('g')
+    .attr('transform','translate(10,0)')
+    .call(slider);
 
   //$("svg").css({top:1300,position:'absolute'});
 
+  //define priority queu
+  class QElement { 
+    constructor(element, priority) 
+    { 
+        this.element = element; 
+        this.priority = priority; 
+    } 
+  } 
+  
+// PriorityQueue class 
+  class PriorityQueue { 
+      // An array is used to implement priority 
+      constructor() 
+      { 
+          this.items = []; 
+      } 
+      enqueue(element, priority) 
+      { 
+        // creating object from queue element 
+        var qElement = new QElement(element, priority); 
+        var contain = false; 
+
+        // iterating through the entire 
+        // item array to add element at the 
+        // correct location of the Queue 
+        for (var i = 0; i < this.items.length; i++) { 
+            if (this.items[i].priority > qElement.priority) { 
+                // Once the correct location is found it is 
+                // enqueued 
+                this.items.splice(i, 0, qElement); 
+                contain = true; 
+                break; 
+            } 
+        } 
+
+        // if the element have the highest priority 
+        // it is added at the end of the queue 
+        if (!contain) { 
+            this.items.push(qElement); 
+        } 
+      }
+      clear(){
+        this.items = [];        
+      }
+      print(){
+        return this.items;
+      } 
+  }
 
 
   //create a new gui object and adjust width so all descriptions can be read
@@ -200,7 +271,88 @@ var params = {
   mouth.add( params, 'AU26', 0, 1 ).name('AU26 - Jaw Drop').step( 0.01 ).listen().onChange( function( value ) { au(26 , value, getSide()); move_face(1); getData()['AU26']=value; } );
   mouth.add( params, 'AU27', 0, 1 ).name('AU27 - Mouth Stretch').step( 0.01 ).listen().onChange( function( value ) { au(27 , value, getSide()); move_face(1); getData()['AU27']=value; } );
 
+  //inRecord check if user hit start; if not, the makeKeyframe and finish would not work
+  var inRecord = false;
+  //when start recording, push initial state to storage
+  var storage = [];
+  //all finish animation
+  var history = [];
+  //priority queue
+  var priorityQueue = new PriorityQueue();
+  //hit the button to start animation
+  var startRecord = {record:function(){
+      console.log("empty and allocate a new structure") // is there a way to have stack<var>?
+      //empty array
+      //storage = [];
+      priorityQueue.clear();
+      //copy conten into newData
+      var newData = {};
+      Object.assign(newData, getData());
+      priorityQueue.enqueue(newData,slider.value());
+      //storage.push(newData);
+      //console.log(storage[0]);
+      console.log(priorityQueue.print());
+      inRecord = true;
+    }
+  }
+  var startButton = gui.add(startRecord, 'record').name("start animation"); // considersing creating another GUI interface
+  
+  //add 'make keyframe' button
+  var makeKeyframe = {keyVar:function(){
+      if(inRecord){
+        console.log("click")
+        //copy content into newData
+        var newData = {};
+        Object.assign(newData, getData());
+        //storage.push(newData);
+        priorityQueue.enqueue(newData,slider.value());
+      }
+    }
+  };
+  var makeButton = gui.add(makeKeyframe, 'keyVar').name("Make a keyframe");
 
+  //redo button: restart without hit the button again, basically the same as startRecord
+  /*var reRecord = {rerecord:function(){
+      console.log("restart recording") // is there a way to have stack<var>?
+    }
+  }
+  var restartButton = gui.add(reRecord, 'rerecord').name("restart animation");*/
+
+
+  //quit button: stop recording and dont save memory
+  var quitRecord = {quitRecord:function(){
+      if(inRecord){
+        console.log("quit record") // is there a way to have stack<var>?
+        storage = [];
+        priorityQueue.clear();
+        inRecord = false;
+      }
+    }
+  }
+  var quitButton = gui.add(quitRecord, 'quitRecord').name("quit");
+
+  //finish recording
+  var finishRecord = {finishRecord:function(){
+      if(inRecord){
+        console.log("Finish!");
+        //var mAnimation = [];
+        /*for(var i = 0; i < storage.length; i++){
+          console.log(storage[i]);
+        }*/
+        for(var i = 0; i < priorityQueue.print().length; i++){
+          console.log(priorityQueue.print()[i]);
+        }
+        inRecord = false;
+      }
+      //history.push(mAnimation);
+      /*for(var i = 0; i < history.length; i++){
+        for(var j = 0; j < history[i].length; j++){
+          console.log(history[i][j]);
+        }
+      }*/
+    }
+  }
+  var finishButton = gui.add(finishRecord, 'finishRecord').name("finish animation");
   
   //Radio buttons to select the side to modify
   var leftSelect = gui.add(params, 'left').name('Left Side').listen().onChange(function(value){setVals(leftVal);});
@@ -208,6 +360,12 @@ var params = {
   var bothSelect = gui.add(params, 'both').name('Both Sides').listen().onChange(function(value){setVals(bothVal);});
   var obj = {Reset:function(){clearVals(params, 'both'); clearVals(bothVal, 'both'); clearVals(rightVal, 'right'); clearVals(leftVal, 'left');}};
   var reset = gui.add(obj,'Reset');
+
+  //time slider
+  var timeSlider = gui.add(params, "time").name("Animation time").min(0).max(50).step(1).listen().onChange( function( value ) {
+      getData()['time']=value; 
+      console.log(value);
+    } );
 
   function getData(){
     if(params['left'] == true){

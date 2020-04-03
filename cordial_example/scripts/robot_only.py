@@ -29,5 +29,5 @@ from cordial_core import RobotManager
 if __name__=="__main__":
     rospy.init_node("CoRDial_example")
     rm = RobotManager("DB1")
-    for i in range(1,15):
-        rm.say("statement{}".format(i),wait=True)
+    for i in range(1,8):
+        rm.say("emote{}".format(i),wait=True)

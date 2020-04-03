@@ -1,7 +1,7 @@
-[statement1]Hi! Welcome to cordial, the most *leftBrowRaise*cordial robot controller!
-[statement2]I'll do behaviors tagged *doubleBrowRaise*in the script!
-[statement3]These first few sentences were pre-generated.
-[statement4]I recommend you keep my statements short and sweet.
+[statement1]Hi! Jingping! You are a little piggy *leftBrowRaise*!
+[statement2]I am sorry what i did to you!
+[statement3]So so so so so so so so so sorry.
+[statement4]Can you forgive me?
 [statement5]It makes it *mischievous* easier for everything to stay synchronized.
 [statement6]I can also perform with amazon effects!
 [statement7]*loud*You can <prosody volume="x-loud">make my voice loud</prosody>, *quiet*or <amazon:effect name="whispered">soft as a whisper</amazon:effect>.
@@ -12,3 +12,10 @@
 [statement12]I can say fractions like <say-as interpret-as="fraction">3+1/2</say-as> or telephone numbers like <say-as interpret-as="telephone">2137406245</say-as>
 [statement13]But don't worry, I can still stop <break time="100ms"/>*breath*<amazon:breath duration="long" volume="x-loud"/><break time="700ms"/>and take breath when I need to.
 [statement14]I hope you enjoy working with me!
+[emote1]I will play happiness *happiness* <break time="3000ms"/>
+[emote2]I will play sadness *sadness* <break time="3000ms"/>
+[emote3]I will play surprise *surprise* <break time="3000ms"/>
+[emote4]I will play fear *fear* <break time="3000ms"/>
+[emote5]I will play anger *anger* <break time="3000ms"/>
+[emote6]I will play disgust *disgust* <break time="3000ms"/>
+[emote7]I will play contempt *contempt* <break time="3000ms"/>
