@@ -59,6 +59,66 @@ var viseme_adjustment;
 var viseme_buffer, viseme_time_buffer, viseme_dur, viseme_start;
 var startup_time, prev_frame_time;
 
+// This function sets all the default values for each parameter so that the user won't have to
+// specify a value for each one. It then passes these keys and values into startFace to create the face.
+
+// eg. createFaceFromOption({}); will create a face using the default options below
+// feel free to change the values
+
+// I used this as a guide:
+// https://medium.com/dailyjs/named-and-optional-arguments-in-javascript-using-es6-destructuring-292a683d5b4e
+createFaceFromOptions = function({bkgd_color = '#000000',
+	robot_name = 'DB1',
+	ros_uri = '',
+	cm_per_pixel = .009,
+	viseme_adj = 0,
+	eye_white_color = '#ffffff',
+	eye_iris_color = '#000000',
+	eye_size = 150,
+	eye_height = 80,
+	eye_separation = 400,
+	eye_iris_size = 60,
+	eye_pupil_scale = .7,
+	eye_pupil_shape = "round",
+	eyelid_width = 150,
+	eyelid_height = 130,
+	eyelid_arch = .4,
+	nose_color = '#ff99cc',
+	nose_x = 0,
+	nose_y = 10,
+	nose_width = 0,
+	nose_height = 0,
+	mouth_color = '#FFFFFF',
+	mouth_x = 15,
+	mouth_y = -60,
+	mouth_width = 450,
+	mouth_height = 20,
+	mouth_thickness = 18,
+	mouth_opening = 2,
+	mouth_dimple_size = 8,
+	upper_lip_height_scale = 100.2,
+	lower_lip_height_scale = 1000.2,
+	brow_color = '#FFFFFF',
+	brow_width = 130,
+	brow_height = 120,
+	brow_thickness = 18,
+	brow_innersize = 11,
+	eyeshine_color = '#FFFFFF'}) {
+
+    	startFace(bkgd_color, //background color
+		  robot_name, ros_uri, //robot name, ros_master_uri
+		  cm_per_pixel, //cm per pixel
+		  viseme_adj, //viseme compression factor
+		  eye_white_color, eye_iris_color, eye_size, eye_height, eye_separation, eye_iris_size, eye_pupil_scale, eye_pupil_shape, //eyes (white_color, iris_color, size, height, separation, iris_size, pupil_scale, pupil_shape)
+		  eyelid_width, eyelid_height, eyelid_arch, //eyelids (width, height, arch)
+		  nose_color, nose_x, nose_y, nose_width, nose_height, //nose (color, x, y, width, height)
+		  mouth_color, mouth_x, mouth_y, mouth_width, mouth_height, mouth_thickness, mouth_opening, mouth_dimple_size, upper_lip_height_scale, lower_lip_height_scale, //mouth (color, x, y, width, height, thickness, opening, dimple_size, ulip_h_scale, llip_h_scale)
+		  brow_color, brow_width, brow_height, brow_thickness, brow_innersize, //brows (color, width, height, thickness, innersize)
+		  eyeshine_color //eye shine  (can be made optional)
+			
+		);
+};
+
 
 /*
 This is the first function that is called by the HTML Script.
@@ -100,7 +160,8 @@ function startFace(bkgd_color,
        brow_width,
        brow_height,
        brow_thickness,
-       brow_innersize){
+       brow_innersize,
+       eyeshine_color){
 
           d = new Date();
           startup_time = d.getTime()
@@ -140,7 +201,8 @@ function startFace(bkgd_color,
             eye_separation,
             eye_iris_size,
             eye_pupil_scale,
-            eye_pupil_shape);
+            eye_pupil_shape,
+            eyeshine_color);
           //
           // addLids(color, width, height, arch)
           addLids(background_color,
@@ -761,19 +823,25 @@ initializes the eye objects. Handles the placement within the facePart reference
 Eyes are spheres with circular irises, circular pupils and a circular catchlight (the white shine)
 TODO: put the cat pupils in I guess
 */
-function addEyes(white_color, iris_color, size, height, separation, iris_size, pupil_scale, pupil_shape){
+
+// TODO 6/3: add a parameter to edit the colour of the eyeshine
+// for the eyeshine colour, look up javascript optional parameters (like python)
+// to see if you can make the eyeshine colour optional and
+// whether you can set it to a default value if not specified
+// DONE
+function addEyes(white_color, iris_color, size, height, separation, iris_size, pupil_scale, pupil_shape, eyeshine_color = 'white'){
 
     function makeEyeGroup(){
       var iris = two.makeCircle(0, 0, iris_size);
       var pupil = two.makeCircle(0, 0, iris_size * pupil_scale);
-      var eyeShine = two.makeCircle( - iris_size*pupil_scale/2 ,  - iris_size*pupil_scale/1.6, iris_size * pupil_scale / 3);
-
+      var eyeshine = two.makeCircle( - iris_size*pupil_scale/2 ,  - iris_size*pupil_scale/1.6, iris_size * pupil_scale / 3);
 
       iris.fill = iris_color
       iris.stroke = 'None'
       pupil.fill = 'black'
+      eyeshine.fill = eyeshine_color
 
-      return two.makeGroup(iris,pupil,eyeShine)
+      return two.makeGroup(iris,pupil,eyeshine)
     }
 
     var x_adj = two.width/2// (separation)//*(size/camera_depth);
