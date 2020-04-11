@@ -63,8 +63,8 @@
   // Simple, slider UI
   var slider = d3.sliderHorizontal()
                  .min(0)
-                 .max(10)
-                 .step(1)
+                 .max(60)
+                 .step(0.01)
                  .width(document.body.clientWidth)
                  .displayValue(false)
                  .on('onchange', val=>{
@@ -113,7 +113,7 @@
                      console.log(slider.value());
                     }
                    });
-    console.log(document.body.clientWidth);     
+  console.log(document.body.clientWidth);     
   var svg = d3.select('#slider')
     .append('svg')
     .attr('width',document.body.clientWidth)
@@ -123,10 +123,44 @@
     .attr('transform','translate(10,0)')
     .call(slider);
 
-  /*slider.addEventListener("change",function(){
-    console.log("haha");
-  });*/
-  
+ 
+  //create a button
+  // Create data = list of groups
+var allGroup = ["play", "paused"]
+
+// Initialize the button
+var dropdownButton = d3.select("#dataviz_builtWithD3")
+  .append('select')
+
+// add the options to the button
+dropdownButton // Add a button
+  .selectAll('myOptions') // Next 4 lines add 6 options = 6 colors
+ 	.data(allGroup)
+  .enter()
+	.append('option')
+  .text(function (d) { return d; }) // text showed in the menu
+  .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+
+// A function that update the color of the circle
+/*function updateChart(mycolor) {
+zeCircle
+  .transition()
+  .duration(1000)
+  .style("fill", mycolor)
+}*/
+
+// When the button is changed, run the updateChart function
+/*dropdownButton.on("change", function(d) {
+
+  // recover the option that has been chosen
+  var selectedOption = d3.select(this).property("value")
+
+  // run the updateChart function with this selected option
+  //updateChart(selectedOption)
+  console.log("button testing");
+})*/
+
 
 
 
@@ -213,89 +247,34 @@
           inRecord = false;
           isAnimation = true;
 
-          //trial
-          //au(1,1,'l');
-          //move_face(1);
-          setUpFirstFrame();
-          playAnimation();
+          
+          chan();
         }
       }
     }
     var finishButton = agui.add(finishRecord, 'finishRecord').name("finish animation");
 
-    //play animation
-    //define lerp function
-    function lerp(start, end, amount){
-        return start + amount*(end-start);
-    }
-    //call this function to set the beginning as the first key frame
-    function setUpFirstFrame(){
-        for(var key in leftPriorityQueue.print()[0].element){
-            aus_l[key] = leftPriorityQueue.print()[0].element[key];
-            aus_r[key] = rightPriorityQueue.print()[0].element[key];
-            au(parseInt(key),parseFloat(leftPriorityQueue.print()[0].element[key]),'l');
-            au(parseInt(key),parseFloat(rightPriorityQueue.print()[0].element[key]), 'r');
-        }
-        //move face
-        move_face(1);
-    }
-    
+    //check if i can change slider value
+    function chan(){
+      console.log("here");
+      slider.value(6);
 
-    /*function playAnimation(){
-      var currTime = leftPriorityQueue.print()[0].priority;
-      var nextTime = leftPriorityQueue.print()[1].priority;
-      var da = new Date();
-      var last = da.getTime();
-      while(currTime < nextTime){
+      //set up first frame
+      slider.value(0);
+      //time variable
+      var beginDate = new Date();
+      var beginTime = beginDate.getTime();
+      var currMoment = 0;
+      var endTime = leftPriorityQueue.print()[leftPriorityQueue.print().length - 1].priority;
+      //loop to play animation
+      while(currMoment < endTime){
+        //calculate time elapsed
         var d = new Date();
         var curr = d.getTime();
-        var interval = (curr - last) / parseFloat(1000);
-        if(interval < 0.05) continue;
-        currTime += interval;
-        last = curr;
-        var amount = (currTime - 0) * 1.0/(nextTime - 0); 
-        for(var key in leftPriorityQueue.print()[0].element){
-            //lerping
-            aus_l[key] = aus_l[key] + 0.05;
-            aus_r[key] = aus_r[key] + 0.05;
-            au(parseInt(key),parseFloat(aus_l[key]),'l');
-            au(parseInt(key),parseFloat(aus_r[key]), 'r');
-        }
-        move_face(1);
-        console.log(aus_l);  
-        //move_face(1);
+        currMoment = (curr - beginTime) / parseFloat(1000);
+        if(currMoment >= endTime) break;
+        //this changes slider value, and will call onchange automatically
+        slider.value(currMoment);
       }
-    }*/
-    function playAnimation(){
-        var currTime = leftPriorityQueue.print()[0].priority;
-        var next = 1;
-        var da = new Date();
-        var last = da.getTime();
-        while(next < leftPriorityQueue.print().length){
-            var startTime = currTime;
-            var nextTime = leftPriorityQueue.print()[next].priority;
-            while(currTime < nextTime){
-                var d = new Date();
-                var curr = d.getTime();
-                var interval = (curr - last) / parseFloat(1000);
-                if(interval < 0.05) continue;
-                currTime += (curr - last) / parseFloat(1000);
-                
-                //console.log(currTime);
-                last = curr;
-                var amount = (currTime - startTime) * 1.0/(nextTime - startTime); 
-                for(var key in leftPriorityQueue.print()[0].element){
-                    //lerping
-                    aus_l[key] = lerp(aus_l[key], leftPriorityQueue.print()[next].element[key],amount);
-                    aus_r[key] = lerp(aus_r[key], rightPriorityQueue.print()[next].element[key],amount);
-                    au(parseInt(key),parseFloat(lerp(aus_l[key], leftPriorityQueue.print()[next].element[key],amount)),'l');
-                    au(parseInt(key),parseFloat(lerp(aus_r[key], rightPriorityQueue.print()[next].element[key],amount)), 'r');
-                }
-                console.log(aus_l);  
-                move_face(1);      
-            }
-            currTime = nextTime;
-            initTIme = currTime; /// 
-            next++;
-        }
     }
+   
