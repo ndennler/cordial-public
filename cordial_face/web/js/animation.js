@@ -50,6 +50,11 @@
     //priority queue
     var leftPriorityQueue = new PriorityQueue();
     var rightPriorityQueue = new PriorityQueue();
+
+    //variable for animation: interval
+    var myInterval;
+    var endTime;
+    var currMo;
   
   
   //add event listener to resize window
@@ -58,6 +63,15 @@
 
   var isAnimation = false;
 
+  //display aniamation
+  function chan(){
+    endTime = leftPriorityQueue.print()[leftPriorityQueue.print().length - 1].priority;
+    currMo = 0;
+    myInterval = setInterval( function(){
+      slider.value(currMo);
+      currMo += 0.5;
+    },500 ); 
+  }
 
   //d3 experiment
   // Simple, slider UI
@@ -68,7 +82,12 @@
                  .width(document.body.clientWidth)
                  .displayValue(false)
                  .on('onchange', val=>{
-                   if(isAnimation){
+                   if(currMo > endTime){
+                     clearInterval(myInterval);
+                     slider.value(endTime);
+                     currMo = endTime;
+                   }
+                   else if(isAnimation){
                      var lastIndex = 0;
                      var nextIndex = 0;
                      var currMoment = slider.value();
@@ -130,7 +149,7 @@ var allGroup = ["play", "paused"]
 
 // Initialize the button
 var dropdownButton = d3.select("#dataviz_builtWithD3")
-  .append('select')
+  .append('select') // append div
 
 // add the options to the button
 dropdownButton // Add a button
@@ -246,22 +265,97 @@ zeCircle
           }*/
           inRecord = false;
           isAnimation = true;
-
           
+          makeJson();
+
+          //play animation
           chan();
+          
+        
         }
       }
     }
     var finishButton = agui.add(finishRecord, 'finishRecord').name("finish animation");
+    
+    //once making an animation, make a json file
+    function makeJson(){
+      //decide dofs
+      var set1 = new Set();
+      var leftChange = false;
+      var rightChange = false;
+      for(var i = 0; i < leftPriorityQueue.print().length-1; i++){
+        var thisMoment = leftPriorityQueue.print()[i].priority;
+        for(var key in leftPriorityQueue.print()[i].element){
+          if((leftPriorityQueue.print()[i+1].element[key] - leftPriorityQueue.print()[i].element[key]) != 0){
+            set1.add(key);
+            leftChange = true;
+          }
+          if((rightPriorityQueue.print()[i+1].element[key] - rightPriorityQueue.print()[i].element[key]) != 0){
+            set1.add(key);
+            rightChange = true;
+          }
+        }
+      }
+      /*
+      //the method to iterate through set
+      for(let myNum of set1){
+        console.log("Hello: "+myNum);
+      }*/
+
+      var variables = {};
+      var mKey = "dofs";
+      variables[mKey] = set1;
+      console.log(variables);
+
+      var keyframe = {};
+      var keyframeHolder = [];
+      //mKeyframe["keyframe"] =
+
+      //loop through priority queue and make keyframe data
+      for(var i = 0; i < leftPriorityQueue.print().length; i++){
+        var keyframeVal = [];
+        //loop through set
+        var pose = {};
+        var poseVal = [];
+        for(let myNum of set1){
+          var tempVal = leftPriorityQueue.print()[i].element[myNum];
+          poseVal.push(tempVal);
+        }
+        pose["pose"] = poseVal;
+        keyframeVal.push(pose);
+        //time variable
+        var timeVar = {};
+        timeVar["time"] = leftPriorityQueue.print()[i].priority;
+        keyframeVal.push(timeVar);
+
+        var endAction = {};
+        endAction["ending_action"] = false;
+        keyframeVal.push(endAction);
+
+        //mKeyframe["keyframe"] = 
+        keyframeHolder.push(keyframeVal);
+      }
+      keyframe["keyframe"] = keyframeHolder;
+      console.log(keyframe);
+      //var data = JSON.stringify( leftPriorityQueue.print());
+    }
+    /*
+    function waitForDelay(delay){
+      var startTime = new Date();
+      var endTime = null;
+      do{
+        endTime = new Date();
+      }
+      while((endTime - startTime) < delay);
+
+    }*/
 
     //check if i can change slider value
-    function chan(){
-      console.log("here");
-      slider.value(6);
+    /*function chan(){
 
       //set up first frame
-      slider.value(0);
       //time variable
+      
       var beginDate = new Date();
       var beginTime = beginDate.getTime();
       var currMoment = 0;
@@ -269,12 +363,21 @@ zeCircle
       //loop to play animation
       while(currMoment < endTime){
         //calculate time elapsed
+        waitForDelay(1000);
         var d = new Date();
         var curr = d.getTime();
         currMoment = (curr - beginTime) / parseFloat(1000);
-        if(currMoment >= endTime) break;
+        if(currMoment >= endTime){
+          slider.value(endTime);
+          break;
+        }
         //this changes slider value, and will call onchange automatically
         slider.value(currMoment);
       }
-    }
+      
+      console.log("finish animation");
+      
+    }*/
+  
+    
    
