@@ -97,3 +97,18 @@ $ sudo ufw allow 9090
         ~~~~
         $ rosrun cordial_example robot_only.py
         ~~~~
+
+
+How to Implement Face Capture
+1. Include the following line in the HTML file to include the script:
+    <script src="js/faceCapture.js"></script>
+
+2. Once included, you can press the "enter" key to start capturing the stream of images.
+    - There will be an alert to notify you of this.
+
+3. Press the "enter" key again to stop capturing.
+    - There will be an alert to notify you of this.
+
+Notes: 
+- The script uses a publisher so make sure you roslaunch first to implement this.
+- The topic being published to is "robotName+'/face/screen_capture'"
